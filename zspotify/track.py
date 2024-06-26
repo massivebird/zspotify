@@ -120,6 +120,7 @@ def download_track(mode: str, track_id: str, extra_keys=None, disable_progressba
          track_number, scraped_song_id, is_playable, duration_ms) = get_song_info(track_id)
 
         song_name = fix_filename(artists[0]) + ' - ' + fix_filename(name)
+        print(f"###   Downloading {song_name} (if ^ downloading)   ###")
 
         for k in extra_keys:
             output_template = output_template.replace("{"+k+"}", fix_filename(extra_keys[k]))
@@ -183,7 +184,15 @@ def download_track(mode: str, track_id: str, extra_keys=None, disable_progressba
                     if track_id != scraped_song_id:
                         track_id = scraped_song_id
                     track_id = TrackId.from_base62(track_id)
-                    stream = ZSpotify.get_content_stream(track_id, ZSpotify.DOWNLOAD_QUALITY)
+                    stream = None
+                    while True:
+                        try:
+                            stream = ZSpotify.get_content_stream(track_id, ZSpotify.DOWNLOAD_QUALITY)
+                            break
+                        except:
+                            print("Failed getting content stream. Please wait...")
+                            time.sleep(3)
+                            pass
                     create_download_directory(filedir)
                     total_size = stream.input_stream.size
 
@@ -211,7 +220,15 @@ def download_track(mode: str, track_id: str, extra_keys=None, disable_progressba
 
                     time_downloaded = time.time()
 
-                    genres = get_song_genres(raw_artists, name)
+                    genres = None
+                    while True:
+                        try:
+                            genres = get_song_genres(raw_artists, name)
+                            break
+                        except:
+                            print("Failed getting genres. Please wait...")
+                            time.sleep(3)
+                            pass
 
                     convert_audio_format(filename_temp)
                     set_audio_tags(filename_temp, artists, genres, name, album_name, release_year, disc_number, track_number)

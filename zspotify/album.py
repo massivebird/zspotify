@@ -48,6 +48,7 @@ def download_album(album):
     artist, album_name = get_album_name(album)
     tracks = get_album_tracks(album)
     for n, track in Printer.progress(enumerate(tracks, start=1), unit_scale=True, unit='Song', total=len(tracks)):
+        print()
         download_track('album', track[ID], extra_keys={'album_num': str(n).zfill(2), 'artist': artist, 'album': album_name, 'album_id': album}, disable_progressbar=True)
 
 
