@@ -191,7 +191,7 @@ def download_track(mode: str, track_id: str, extra_keys=None, disable_progressba
                             break
                         except:
                             print("Failed getting content stream. Please wait...")
-                            time.sleep(3)
+                            time.sleep(10)
                             pass
                     create_download_directory(filedir)
                     total_size = stream.input_stream.size
@@ -209,7 +209,11 @@ def download_track(mode: str, track_id: str, extra_keys=None, disable_progressba
                             disable=disable_progressbar
                     ) as p_bar:
                         for _ in range(int(total_size / ZSpotify.CONFIG.get_chunk_size()) + 1):
-                            data = stream.input_stream.stream().read(ZSpotify.CONFIG.get_chunk_size())
+                            try:
+                                data = stream.input_stream.stream().read(ZSpotify.CONFIG.get_chunk_size())
+                            except:
+                                # man it sounds fine anyway
+                                break
                             p_bar.update(file.write(data))
                             downloaded += len(data)
                             if ZSpotify.CONFIG.get_download_real_time():
@@ -220,15 +224,20 @@ def download_track(mode: str, track_id: str, extra_keys=None, disable_progressba
 
                     time_downloaded = time.time()
 
+                    genre_tries = 0
                     genres = None
                     while True:
                         try:
                             genres = get_song_genres(raw_artists, name)
                             break
                         except:
+                            if genre_tries >= 7:
+                                print("You know what, we don't even need genres... probably")
+                                break
                             print("Failed getting genres. Please wait...")
+                            genre_tries += 1
                             time.sleep(3)
-                            pass
+                            continue
 
                     convert_audio_format(filename_temp)
                     set_audio_tags(filename_temp, artists, genres, name, album_name, release_year, disc_number, track_number)
