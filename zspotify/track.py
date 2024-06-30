@@ -1,3 +1,4 @@
+import mutagen
 import os
 import re
 import time
@@ -7,6 +8,8 @@ from typing import Any, Tuple, List
 from librespot.audio.decoders import AudioQuality
 from librespot.metadata import TrackId
 from ffmpy import FFmpeg
+from mutagen.easyid3 import EasyID3
+from mutagen.id3 import ID3, TDRC, TDOR
 
 from const import TRACKS, ALBUM, GENRES, NAME, ITEMS, DISC_NUMBER, TRACK_NUMBER, IS_PLAYABLE, ARTISTS, IMAGES, URL, \
     RELEASE_DATE, ID, TRACKS_URL, SAVED_TRACKS_URL, TRACK_STATS_URL, CODEC_MAP, EXT_MAP, DURATION_MS, HREF
@@ -245,6 +248,19 @@ def download_track(mode: str, track_id: str, extra_keys=None, disable_progressba
 
                     if filename_temp != filename:
                         os.rename(filename_temp, filename)
+
+                    audio = ID3(filename)
+                    if 'TDOR' in audio:
+                        original_release_time = str(audio['TDOR'].text[0])
+                        
+                        # Copy the "Original Release Time" to "Recording Time" (TDRC)
+                        audio['TDRC'] = TDRC(encoding=3, text=original_release_time)
+
+                        # Copy the "Original Release Time" to "Date/Time Original" (TDOR)
+                        audio['TDOR'] = TDOR(encoding=3, text=original_release_time)
+
+                        audio.save(v2_version=3)
+                        print(f"Updated metadata for {filename}")
 
                     time_finished = time.time()
 

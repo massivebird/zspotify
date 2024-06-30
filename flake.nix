@@ -28,6 +28,7 @@
         # nix develop or nix shell
         devShell = pkgs.mkShell {buildInputs = [
           pkgs.python312Packages.ffmpy
+          pkgs.python312Packages.mutagen # editing metadata
           pkgs.python312Packages.music-tag
           pkgs.python312Packages.pillow
           pkgs.protobuf
