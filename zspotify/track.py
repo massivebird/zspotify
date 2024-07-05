@@ -191,6 +191,7 @@ def download_track(mode: str, track_id: str, extra_keys=None, disable_progressba
                     while True:
                         try:
                             stream = ZSpotify.get_content_stream(track_id, ZSpotify.DOWNLOAD_QUALITY)
+                            print("Ok I got the content stream")
                             break
                         except:
                             print("Failed getting content stream. Please wait...")
@@ -253,10 +254,7 @@ def download_track(mode: str, track_id: str, extra_keys=None, disable_progressba
                     if 'TDOR' in audio:
                         original_release_time = str(audio['TDOR'].text[0])
                         
-                        # Copy the "Original Release Time" to "Recording Time" (TDRC)
                         audio['TDRC'] = TDRC(encoding=3, text=original_release_time)
-
-                        # Copy the "Original Release Time" to "Date/Time Original" (TDOR)
                         audio['TDOR'] = TDOR(encoding=3, text=original_release_time)
 
                         audio.save(v2_version=3)
