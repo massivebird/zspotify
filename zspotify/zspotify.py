@@ -17,8 +17,14 @@ class ZSpotify:
     CONFIG: Config = Config()
 
     def __init__(self, args):
-        ZSpotify.CONFIG.load(args)
-        ZSpotify.login()
+        while True:
+            try:
+                ZSpotify.CONFIG.load(args)
+                ZSpotify.login()
+                break
+            except:
+                print("Failed to log in. Trying again...")
+                time.sleep(7)
 
     @classmethod
     def login(cls):
