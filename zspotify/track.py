@@ -245,7 +245,13 @@ def download_track(mode: str, track_id: str, extra_keys=None, disable_progressba
 
                     convert_audio_format(filename_temp)
                     set_audio_tags(filename_temp, artists, genres, name, album_name, release_year, disc_number, track_number)
-                    set_music_thumbnail(filename_temp, image_url)
+                    while True:
+                        try:
+                            set_music_thumbnail(filename_temp, image_url)
+                            break
+                        except:
+                            print("Failed to get thumbnail. Trying again...")
+                            time.sleep(5)
 
                     if filename_temp != filename:
                         os.rename(filename_temp, filename)
