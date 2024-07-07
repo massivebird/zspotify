@@ -23,8 +23,8 @@ class ZSpotify:
                 ZSpotify.login()
                 break
             except:
-                print("Failed to log in. Trying again...")
-                time.sleep(7)
+                Printer.print(PrintChannel.WARNINGS, "Failed to initialize. Trying again...")
+                time.sleep(3)
 
     @classmethod
     def login(cls):
