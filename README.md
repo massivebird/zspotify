@@ -1,3 +1,9 @@
+Welcome to __massivebird__'s zspotify fork! This fork features:
+
++ Retrying functions that can fail
++ Writing to additional MP3 metadata fields
++ Additional (and totally unnecessary) progress messages
+
 ![Stars](https://img.shields.io/github/stars/Footsiefat/zspotify.svg)
 ![Forks](https://img.shields.io/github/forks/Footsiefat/zspotify.svg)
 ![Size](https://img.shields.io/github/repo-size/Footsiefat/zspotify)
