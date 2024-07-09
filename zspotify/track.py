@@ -233,20 +233,13 @@ def download_track(mode: str, track_id: str, extra_keys=None, disable_progressba
 
                     time_downloaded = time.time()
 
-                    genre_tries = 0
-                    genres = None
                     while True:
                         try:
                             genres = get_song_genres(raw_artists, name)
                             break
                         except:
-                            if genre_tries >= 7:
-                                print("You know what, we don't even need genres... probably")
-                                break
                             print("Failed getting genres. Please wait...")
-                            genre_tries += 1
-                            time.sleep(3)
-                            continue
+                            time.sleep(7)
 
                     convert_audio_format(filename_temp)
                     set_audio_tags(filename_temp, artists, genres, name, album_name, release_year, disc_number, track_number)
