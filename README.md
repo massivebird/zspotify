@@ -1,6 +1,6 @@
 Welcome to __massivebird__'s zspotify fork! This fork features:
 
-+ Retrying functions that can fail
++ Attempts to retry failed API queries
 + Writing to additional MP3 metadata fields
 + Additional (and totally unnecessary) progress messages
 
