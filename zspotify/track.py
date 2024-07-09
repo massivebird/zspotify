@@ -119,8 +119,13 @@ def download_track(mode: str, track_id: str, extra_keys=None, disable_progressba
     try:
         output_template = ZSpotify.CONFIG.get_output(mode)
 
-        (artists, raw_artists, album_name, name, image_url, release_year, disc_number,
-         track_number, scraped_song_id, is_playable, duration_ms) = get_song_info(track_id)
+        while True:
+            try:
+                (artists, raw_artists, album_name, name, image_url, release_year, disc_number,
+                    track_number, scraped_song_id, is_playable, duration_ms) = get_song_info(track_id)
+                break
+            except:
+                time.sleep(4)
 
         song_name = fix_filename(artists[0]) + ' - ' + fix_filename(name)
         print(f"###   Downloading {song_name} (if ^ downloading)   ###")
