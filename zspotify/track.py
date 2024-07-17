@@ -237,8 +237,9 @@ def download_track(mode: str, track_id: str, extra_keys=None, disable_progressba
                         try:
                             genres = get_song_genres(raw_artists, name)
                             break
-                        except:
-                            print("Failed getting genres. Please wait...")
+                        except Exception as e:
+                            print("Failed getting genres: exception " + str(e))
+                            print("Retrying...")
                             time.sleep(7)
 
                     convert_audio_format(filename_temp)
